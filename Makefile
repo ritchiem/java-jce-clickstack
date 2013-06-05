@@ -3,7 +3,7 @@ publish_bucket = cloudbees-clickstack
 publish_repo = testing
 publish_url = s3://$(publish_bucket)/$(publish_repo)/
 
-deps = lib/UnlimitedJCEPolicy/local_policy.jar lib/UnlimitedJCEPolicy/US_export_policy.jar
+deps = lib/local_policy.jar lib/US_export_policy.jar
 
 pkg_files = functions lib LICENSE setup
 
@@ -14,16 +14,18 @@ include plugin.mk
 clean: clean-deps clean-pkg
 	rm -rf lib
 		
-lib/UnlimitedJCEPolicy/US_export_policy.jar:
+lib/US_export_policy.jar:
 	mkdir -p lib
 	cp -f "$(java_jce_unlimited_src)" lib/jce_unlimited.zip 
-	unzip -d lib lib/jce_unlimited.zip UnlimitedJCEPolicy/US_export_policy.jar
+	unzip -d lib lib/jce_unlimited.zip */US_export_policy.jar
+	mv lib/*/US_export_policy.jar lib
 	rm -r lib/jce_unlimited.zip 
 			
-lib/UnlimitedJCEPolicy/local_policy.jar:
+lib/local_policy.jar:
 	mkdir -p lib
 	#curl -fLo lib/jce_unlimited.zip "$(java_jce_unlimited_src)"
 	cp -f "$(java_jce_unlimited_src)" lib/jce_unlimited.zip 
-	unzip -d lib lib/jce_unlimited.zip UnlimitedJCEPolicy/local_policy.jar
+	unzip -d lib lib/jce_unlimited.zip */local_policy.jar
+	mv lib/*/local_policy.jar lib
 	rm -r lib/jce_unlimited.zip 
 	

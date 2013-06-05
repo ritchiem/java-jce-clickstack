@@ -31,7 +31,7 @@ find_java_home(){
 }
 
 install_java_jce_unlimited_profile() {
-    _plugin_dir=$(java_plugin_dir)
+    _plugin_dir=$(javajce_plugin_dir)
 	_java_home=$(find_java_home)
     cp -f $_plugin_dir/lib/UnlimitedJCEPolicy/* $_java_home/lib/security/
 }

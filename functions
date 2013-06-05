@@ -4,12 +4,25 @@
 
 default_java_version=1.7
 
+javajce_plugin_dir() {
+    _local_jar=$plugin_dir/lib/UnlimitedJCEPolicy/local_policy.jar
+    _java_embedded_jar=$plugin_dir/java-jce/lib/UnlimitedJCEPolicy/local_policy.jar
+    if [ -e $plugin_dir/lib/UnlimitedJCEPolicy/local_policy.jar ]; then
+	echo $plugin_dir
+    elif [ -e $plugin_dir/java-jce/lib/UnlimitedJCEPolicy/local_policy.jar ]; then
+	echo $plugin_dir/java-jce
+    else
+	echo "Cannot find java-jce plugin dir in $plugin_dir" 1>&2
+	return 1
+    fi
+}
+
 find_java_home(){
     _version=$(metadata java_version $default_java_version)
     case "$_version" in
-        "1.6") echo "/opt/java6/";;
-        "1.7") echo "/opt/java7/";;
-        "1.8") echo "/opt/java8/jre/";;
+        "1.6") echo "/opt/java6";;
+        "1.7") echo "/opt/java7";;
+        "1.8") echo "/opt/java8/jre";;
         *)
 	    echo "Unsupported java version $_version" 1>&2
 	    return 1
@@ -18,7 +31,9 @@ find_java_home(){
 }
 
 install_java_jce_unlimited_profile() {
-    cp -f $plugin_dir/lib/java-jce/lib/UnlimitedJCEPolicy/* $(find_java_home)lib/security
+    _plugin_dir=$(java_plugin_dir)
+	_java_home=$(find_java_home)
+    cp -f $_plugin_dir/lib/UnlimitedJCEPolicy/* $_java_home/lib/security/
 }
 
 

@@ -7,10 +7,9 @@ default_java_version=1.7
 find_java_home(){
     _version=$(metadata java_version $default_java_version)
     case "$_version" in
-        "1.6") echo "/opt/java6/lib";;
-        "1.7") echo "/opt/java7/lib";;
-        "1.8") echo "/opt/java8/jre/lib";;
-	"system") which java;;
+        "1.6") echo "/opt/java6/lib/";;
+        "1.7") echo "/opt/java7/lib/";;
+        "1.8") echo "/opt/java8/jre/lib/";;
         *)
 	    echo "Unsupported java version $_version" 1>&2
 	    return 1
@@ -19,18 +18,7 @@ find_java_home(){
 }
 
 install_java_jce_unlimited_profile() {
-    _version=$(metadata java_version $default_java_version)
-    case "$_version" in
-        "1.7") 	cp -f $plugin_dir/lib/java-jce/lib/UnlimitedJCEPolicy/* "/opt/java7/lib";;
-#         "1.6") 
-#         "1.8") 
-#         "system") 
-        *)
-	    echo "Unsupported java version $_version" 1>&2
-	    return 1
-	    ;;
-    esac
-
+    cp -f $plugin_dir/lib/java-jce/lib/UnlimitedJCEPolicy/* $(find_java_home)
 }
 
 
